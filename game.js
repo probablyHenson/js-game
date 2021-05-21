@@ -1,29 +1,37 @@
-const game = { };
+const game = {
+    screenWidth: '640px',
+    screenHeight: '480px',
+    screenColor: 'black'
+};
 
 function mainLoop(lastTick) {
     if (!lastTick) lastTick = window.performance.now();
     window.requestAnimationFrame(mainLoop);
-    game.setScreenColor('black');
     game.updateTime(lastTick);
+    game.drawScreen();
 }
 
-game.setScreenColor = function(color) {
-    const { canvas, ctx } = this;
-    ctx.fillStyle = color;
+game.drawScreen = function() {
+    game.setScreenColor();
+}
+
+game.setScreenColor = function() {
+    const { canvas, ctx, screenColor } = this;
+    ctx.fillStyle = screenColor;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 }
 
-game.setScreenSize = function (width, height) {
-    const { canvas } = this;
-    canvas.setAttribute('width', width);
-    canvas.setAttribute('height', height);    
+game.setScreenSize = function () {
+    const { canvas, screenWidth, screenHeight } = this;
+    canvas.setAttribute('width', screenWidth);
+    canvas.setAttribute('height', screenHeight);
 }
 
 game.start = function() {
     const canvas = document.getElementById('screen');
     const ctx = canvas.getContext('2d');
     Object.assign(this, { canvas, ctx });
-    this.setScreenSize('640px', '480px');
+    this.setScreenSize();
     mainLoop();
 }
 
